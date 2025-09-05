@@ -39,9 +39,9 @@ const AboutSection = () => {
 const AboutSectionWrapper = () => {
   return (
     <div className="flex flex-col gap-4 mt-5 lg:mt-10 ml-5">
-      {aboutSectionData.map((content) => {
+      {aboutSectionData.map((content, id) => {
         return (
-          <div className="">
+          <div key={id} className="">
             <h3 className="text-lg font-bold">{content.heading}</h3>
             <p className="text-sm">{content.body}</p>
           </div>

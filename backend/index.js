@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import authRoutes from "./routes/authRoutes.js";
-import internshipRoutes from "./routes/internshipRoutes.js";
+import internshipRoutes from "./routes/internshipRoutes.js"; 
 
 dotenv.config();
 const app = express();
@@ -15,7 +15,7 @@ app.use(express.json());
 
 
 app.use("/api/auth", authRoutes);
-app.use("/api/internships", internshipRoutes);
+app.use("/api/internships", internshipRoutes); 
 
 app.get("/", (req, res) => {
   res.send("🚀 Internship Recommendation Engine API is running!");
