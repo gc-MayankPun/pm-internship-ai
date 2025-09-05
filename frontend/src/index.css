@@ -12,3 +12,8 @@ body {
 button {
   will-change: scale; /* To remove the flickering while hover */
 }
+
+/* Global Variables */
+:root {
+  --primary-text-muted: gray;
+}

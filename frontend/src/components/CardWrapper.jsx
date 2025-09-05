@@ -12,6 +12,7 @@ const CardWrapper = () => {
           "Build your profile, find top-matching internships, and start your government career journey."
         } 
         buttonTitle={"Find Internships"}
+        link={"/student/dashboard"}
       />
       <Card
         icon={<MdAdminPanelSettings className="h-[2rem] w-[2rem]" />}
@@ -20,6 +21,7 @@ const CardWrapper = () => {
           "Oversee postings, view applicant matches, and optimize your internship program."
         } 
         buttonTitle={"Open Admin Panel"}
+        link={"/admin/dashboard"}
       />
     </div>
   );

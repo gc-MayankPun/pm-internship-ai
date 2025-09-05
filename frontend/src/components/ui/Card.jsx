@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 
-const Card = ({ title, subtitle, buttonTitle, icon }) => {
+const Card = ({ title, subtitle, buttonTitle, link, icon }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("dashboard");
+    navigate(link);
   };
 
   return (
@@ -15,7 +15,7 @@ const Card = ({ title, subtitle, buttonTitle, icon }) => {
           {icon}
         </span>
         <p className="font-bold text-xl">{title}</p>
-        <p className="text-[13px] text-gray-500">{subtitle}</p>
+        <p className="text-[13px] text-[var(--primary-text-muted)]">{subtitle}</p>
       </div>
       <Button
         title={buttonTitle}
