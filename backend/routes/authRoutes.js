@@ -1,18 +1,10 @@
-const express = require("express");
-const {
-  loginUser,
-  registerUser,
-  logoutUser,
-} = require("../controllers/authController");
+
+import express from "express";
+import { signup, login } from "../controllers/authController.js";
+
 const router = express.Router();
-const { upload } = require("../utils/multerUtil");
 
-router.post("/login", upload.none(), loginUser);
-router.post(
-  "/register",
-  upload.fields([{ name: "avatar", maxCount: 1 }]),
-  registerUser
-);
-router.post("/logout", logoutUser);
+router.post("/signup", signup);
+router.post("/login", login);
 
-module.exports = router;
+export default router;
