@@ -7,7 +7,6 @@ export async function getAllInternships() {
   return result.rows;
 }
 
-
 export async function getRecommendedInternships(userSkills) {
   const result = await db.query(
     `SELECT * FROM internships 
