@@ -1,4 +1,3 @@
-// src/components/ProtectedRoute.jsx
 import { RedirectToSignIn, useUser } from "@clerk/clerk-react";
 import Loader from "./ui/Loader";
 
@@ -14,10 +13,18 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
+  // // If not signed in → Clerk's sign-in UI
+  // if (!isSignedIn) {
+  //   // Send data to backend
+  //   return <RedirectToSignIn redirectUrl={window.location.pathname} />;
+  //   // or: return <Navigate to="/" replace />;  <-- if you want homepage instead
+  // }
+
   // If not signed in → Clerk's sign-in UI
   if (!isSignedIn) {
     // Send data to backend
-    return <RedirectToSignIn redirectUrl={window.location.pathname} />;
+    // return <RedirectToSignIn redirectUrl={window.location.pathname} />;
+    return <RedirectToSignIn redirectUrl={"/login"} />;
     // or: return <Navigate to="/" replace />;  <-- if you want homepage instead
   }
 

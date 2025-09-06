@@ -2,31 +2,35 @@ import { Routes, Route } from "react-router-dom";
 
 // Routes
 import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
-import LoginPage from "./pages/LoginPage";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AppWrapper from "./components/AppWrapper";
+import InternshipForm from "./components/IntershipForm";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login" element={<InternshipForm />} />
       <Route
         path="/student/dashboard"
         element={
-          <StudentDashboard />
-          // <ProtectedRoute>
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <AppWrapper>
+              <StudentDashboard />
+            </AppWrapper>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/admin/dashboard"
         element={
           <ProtectedRoute>
-            <AdminDashboard />
+            <AppWrapper>
+              <AdminDashboard />
+            </AppWrapper>
           </ProtectedRoute>
         }
       />

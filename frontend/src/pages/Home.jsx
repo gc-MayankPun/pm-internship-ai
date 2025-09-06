@@ -1,17 +1,9 @@
-import { useState } from "react";
 import CardWrapper from "../components/CardWrapper";
 
 const Home = () => {
-  const [showAbout, setShowAbout] = useState(false);
-
-  const handleButtonClick = () => {
-    setShowAbout((v) => !v);
-    return;
-  };
-
   return (
-    <div className="min-h-screen bg-[#171C1C] text-white">
-      <IntroSection onAboutClick={handleButtonClick} showAbout={showAbout} />
+    <div className="min-h-[90vh] bg-[#171C1C] text-white">
+      <IntroSection />
     </div>
   );
 };

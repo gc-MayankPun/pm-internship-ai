@@ -1,113 +1,139 @@
-// src/pages/Login.jsx
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useUser } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
 
-export default function LoginPage() {
-  const [role, setRole] = useState("student"); // Could be 'student' or 'admin'
-  const [form, setForm] = useState({ email: "", password: "" });
-  const navigate = useNavigate();
-  const location = useLocation();
+const InternshipForm = () => {
+  const { user, isSignedIn } = useUser();
 
-  // Optional: detect intended role from URL or links (e.g., /login?role=admin)
-  // You could also use props/context for role selector.
+  // react-hook-form setup
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
-  const handleInput = (e) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  // Auto-fill fields from Clerk if signed in
+  useEffect(() => {
+    if (isSignedIn && user) {
+      if (user.fullName) setValue("name", user.fullName);
+      if (user.emailAddresses[0]?.emailAddress) {
+        setValue("email", user.emailAddresses[0].emailAddress);
+      }
+    }
+  }, [user, isSignedIn, setValue]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Replace with your actual login logic:
-    // Example: await loginAPI(form, role)
-    // On success:
-    if (role === "admin") {
-      navigate("/admin/dashboard");
-    } else {
-      navigate("/student/dashboard");
+  const onSubmit = async (data) => {
+    try {
+      const payload = {
+        userId: user.id, // Clerk userId
+        name: data.name || user.fullName,
+        email: user.emailAddresses[0]?.emailAddress, // always from Clerk
+        location: data.location,
+        education: data.education,
+        skills: data.skills,
+      };
+
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/add-profile`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!res.ok) {
+        // Handle non-2xx responses
+        const data = await res.json();
+        toast.error(data.error || data.message || "Something went wrong");
+        return;
+      }
+
+      const result = await res.json();
+      console.log("Profile saved:", result);
+      toast.success("Profile saved successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Server error. Try again.");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-2">
-      <div className="w-full max-w-md bg-gray-800 rounded-xl shadow-lg p-8">
-        {/* Header + Role Switcher */}
-        <div className="flex items-center gap-2 mb-8">
-          <span className="text-2xl font-bold text-yellow-400">Sign In</span>
-          {/* Role Toggle */}
-          <div className="ml-auto flex gap-1">
-            <button
-              className={`px-4 py-1 rounded-l-md font-medium ${
-                role === "student"
-                  ? "bg-yellow-300 text-gray-900"
-                  : "bg-gray-700 text-gray-100"
-              }`}
-              onClick={() => setRole("student")}
-              type="button"
-            >
-              Student
-            </button>
-            <button
-              className={`px-4 py-1 rounded-r-md font-medium ${
-                role === "admin"
-                  ? "bg-yellow-300 text-gray-900"
-                  : "bg-gray-700 text-gray-100"
-              }`}
-              onClick={() => setRole("admin")}
-              type="button"
-            >
-              Employer
-            </button>
-          </div>
+    <div className="max-w-md mx-auto p-6 border rounded-lg shadow-md mt-10">
+      <h2 className="text-2xl font-bold mb-4 text-center">
+        AI Internship PM Scheme Recommendation
+      </h2>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Full Name */}
+        <div>
+          <label className="block font-medium mb-1">Full Name</label>
+          <input
+            type="text"
+            {...register("name", { required: "Name is required" })}
+            placeholder="Enter your full name"
+            className="w-full border p-2 rounded"
+          />
+          {errors.name && (
+            <p className="text-red-500 text-sm">{errors.name.message}</p>
+          )}
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        {/* Email (read-only from Clerk) */}
+        <div>
+          <label className="block font-medium mb-1">Email</label>
           <input
             type="email"
-            name="email"
-            value={form.email}
-            onChange={handleInput}
-            placeholder="Email"
-            required
-            className="rounded border-0 bg-gray-700 text-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            value={user?.emailAddresses[0]?.emailAddress || ""}
+            readOnly
+            className="w-full border p-2 rounded bg-gray-100 cursor-not-allowed"
           />
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleInput}
-            placeholder="Password"
-            required
-            className="rounded border-0 bg-gray-700 text-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-          />
-          <button
-            type="submit"
-            className="bg-yellow-300 text-gray-900 font-bold rounded py-2 transition hover:bg-yellow-400"
-          >
-            Sign In
-          </button>
-        </form>
-
-        {/* Optional: Extra Links */}
-        <div className="flex justify-between mt-5 text-sm text-gray-400">
-          <button
-            onClick={() =>
-              role === "student"
-                ? navigate("/student/signup")
-                : navigate("/admin/signup")
-            }
-            className="hover:text-yellow-300"
-            type="button"
-          >
-            New here? Sign up
-          </button>
-          <a
-            href="#"
-            className="hover:text-yellow-300"
-            // Implement actual reset password logic as needed
-          >
-            Forgot password?
-          </a>
         </div>
-      </div>
+
+        {/* Location */}
+        <div>
+          <label className="block font-medium mb-1">Location</label>
+          <input
+            type="text"
+            {...register("location")}
+            placeholder="City or country"
+            className="w-full border p-2 rounded"
+          />
+        </div>
+
+        {/* Education */}
+        <div>
+          <label className="block font-medium mb-1">Education</label>
+          <input
+            type="text"
+            {...register("education")}
+            placeholder="Your degree or course"
+            className="w-full border p-2 rounded"
+          />
+        </div>
+
+        {/* Skills */}
+        <div>
+          <label className="block font-medium mb-1">Skills</label>
+          <input
+            type="text"
+            {...register("skills")}
+            placeholder="Comma separated skills (e.g. React, AI, PM)"
+            className="w-full border p-2 rounded"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        >
+          Submit
+        </button>
+      </form>
     </div>
   );
-}
+};
+
+export default InternshipForm;

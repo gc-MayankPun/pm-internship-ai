@@ -12,7 +12,7 @@ export const studentSettingsOptions = [
         optionName: "My Profile"
     },
     {
-        id: "fj@eaf",
+        id: "fj@eadf",
         optionName: "All Internships"
     },
 ]
