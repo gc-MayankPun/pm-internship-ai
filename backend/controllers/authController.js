@@ -2,10 +2,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createUser, findUserByEmail } from "../models/userModel.js";
+import AI_recommendation from "../config/gemini-integration.js";
 
 export async function signup(req, res) {
   try {
-    const { name, email, password, education, skills } = req.body;
+    const { name, email, password, location, education, skills } = req.body;
 
     // check if user exists
     const existingUser = await findUserByEmail(email);
@@ -17,7 +18,11 @@ export async function signup(req, res) {
 
     const newUser = await createUser(name, email, hashed, education, skills);
 
-    res.json({ message: "Signup successful", user: newUser });
+     const recommendations = await AI_recommendation({  
+      education,
+      skills,
+      location});
+    res.json({ message: "Signup successful", user: newUser , recommendations});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
