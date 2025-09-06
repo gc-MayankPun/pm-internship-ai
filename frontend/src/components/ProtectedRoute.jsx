@@ -1,10 +1,27 @@
 // src/components/ProtectedRoute.jsx
-import { Navigate } from "react-router-dom";
+import { RedirectToSignIn, useUser } from "@clerk/clerk-react";
+import Loader from "./ui/Loader";
 
 const ProtectedRoute = ({ children }) => {
-  // Check for token or auth flag (customize this logic for your app)
-  const isAuthenticated = !!localStorage.getItem("token");
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  const { isSignedIn, isLoaded } = useUser();
+
+  // Wait until Clerk knows the auth state
+  if (!isLoaded) {
+    return (
+      <div className="h-screen w-full flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
+
+  // If not signed in → Clerk's sign-in UI
+  if (!isSignedIn) {
+    // Send data to backend
+    return <RedirectToSignIn redirectUrl={window.location.pathname} />;
+    // or: return <Navigate to="/" replace />;  <-- if you want homepage instead
+  }
+
+  return children;
 };
 
 export default ProtectedRoute;
