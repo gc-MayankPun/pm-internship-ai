@@ -8,12 +8,13 @@ import StudentDashboard from "./pages/student/StudentDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AppWrapper from "./components/AppWrapper";
 import InternshipForm from "./components/IntershipForm";
+import ResumeForm from "./pages/ResumeForm";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={<InternshipForm />} />
+      <Route path="/login" element={<ResumeForm />} />
       <Route
         path="/student/dashboard"
         element={
