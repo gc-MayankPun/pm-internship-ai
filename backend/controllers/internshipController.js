@@ -11,14 +11,12 @@ export async function listInternships(req, res) {
   }
 }
 
-export async function recommendInternships(req, res) {
+export async function recommendedInternships(req, res) {
   try {
-    const user = await findUserById(req.user.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const email = req.body.email;
 
-    const skillsArray = user.skills.split(",").map(s => s.trim());
+    const recommendations = await getRecommendedInternships(email);
 
-    const recommendations = await getRecommendedInternships(skillsArray);
     res.json(recommendations);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -6,33 +6,8 @@ import {
 } from "../models/userModel.js";
 
 export async function signup(req, res) {
-  // console.log("Request Hit");
   try {
-    // const { name, email, password, location, education, skills } = req.body;
-    const { fullName, email, degree, year, location, skills, interests } =
-      req.body;
-
-    // console.log("Req body Object: ", req.body);
-
-    // const existingUser = await findUserByEmail(email);
-    // console.log("User Exists: ", existingUser);
-
-    // if (existingUser)
-    //   return res.status(400).json({ message: "User already exists" });
-
-    // const hashed = await bcrypt.hash(password, 10);
-    // const newUser = await createUser(
-    //   fullName,
-    //   email,
-    //   // hashed,
-    //   location,
-    //   education,
-    //   skills,
-    //   Degree,
-    //   experience,
-    //   interests
-    // );
-    // console.log("User Created: ", newUser)
+    const { fullName, email, degree, year, location, skills, interests } = req.body;
 
     let recommendations = await AI_recommendation(
       degree,
@@ -41,12 +16,23 @@ export async function signup(req, res) {
       interests
     );
 
-    return res.json(recommendations);
+    const newUser = await createUser(
+      fullName,
+      email,
+      degree,
+      year,
+      location,
+      skills,
+      interests,
+      recommendations
+    );
+
+    return res.json(newUser); // 👈 better: return the full user object
   } catch (err) {
+    console.error("Signup error:", err); // 👈 will show Postgres error in your terminal
     return res.status(500).json({ error: err.message });
   }
 }
-
 export async function login(req, res) {
   try {
     const { email, password } = req.body;

@@ -10,14 +10,40 @@ import db from "../config/db.js";
 //   return result.rows[0];
 // }
 
-export async function createUser(clerkId, name, email, location, education, skills, experience) {
+export async function createUser(
+  fullName,
+  email,
+  degree,
+  year,
+  location,
+  skills,
+  interests,
+  recommendations
+) {
   const result = await db.query(
-    `INSERT INTO users (clerk_id, name, email, location, education, skills, experience)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)
-     ON CONFLICT (clerk_id) DO NOTHING
+    `INSERT INTO users (full_name, email, degree, year, location, skills, interests, recommendations)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+     ON CONFLICT (email) DO UPDATE
+     SET full_name = EXCLUDED.full_name,
+         degree = EXCLUDED.degree,
+         year = EXCLUDED.year,
+         location = EXCLUDED.location,
+         skills = EXCLUDED.skills,
+         interests = EXCLUDED.interests,
+         recommendations = EXCLUDED.recommendations
      RETURNING *`,
-    [clerkId, name, email, location, education, skills, experience]
+    [
+      fullName,
+      email,
+      degree,
+      year,
+      location,
+      JSON.stringify(skills),        // 👈 make sure arrays/objects are stored as JSON
+      JSON.stringify(interests),     // 👈 same
+      JSON.stringify(recommendations) // 👈 same
+    ]
   );
+
   return result.rows[0];
 }
 

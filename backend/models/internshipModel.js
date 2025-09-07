@@ -7,11 +7,11 @@ export async function getAllInternships() {
   return result.rows;
 }
 
-export async function getRecommendedInternships(userSkills) {
+export async function getRecommendedInternships(email) {
   const result = await db.query(
-    `SELECT * FROM internships 
-     WHERE skills_required ILIKE ANY ($1)`,
-    [userSkills.map(skill => `%${skill}%`)]
+    `SELECT recommendations FROM users 
+     WHERE email = ($1)`,
+    [email]
   );
   return result.rows;
 }

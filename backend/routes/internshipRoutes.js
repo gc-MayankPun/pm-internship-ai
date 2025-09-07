@@ -1,11 +1,10 @@
 
 import express from "express";
-import { listInternships, recommendInternships } from "../controllers/internshipController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
+import { listInternships, recommendedInternships } from "../controllers/internshipController.js";
 
 const router = express.Router();
 
 router.get("/", listInternships);
-router.get("/recommendations", authMiddleware, recommendInternships);
+router.post("/recommendations",  recommendedInternships);
 
 export default router;
