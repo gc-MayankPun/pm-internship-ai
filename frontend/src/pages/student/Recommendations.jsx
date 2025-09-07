@@ -3,7 +3,9 @@ import { IoLocationSharp } from "react-icons/io5";
 import { FaRupeeSign } from "react-icons/fa";
 import { BsStars } from "react-icons/bs";
 import { IoIosArrowUp } from "react-icons/io";
-import { useRef, useState } from "react";
+import { useRef, useState } from "react"; 
+import NoDataUI from "../../components/ui/NoDataUI";  
+import { useInternships } from "../../context/useInternships";
 
 const Recommendations = ({ selectedOption }) => {
   return (
@@ -21,37 +23,32 @@ const Recommendations = ({ selectedOption }) => {
 };
 
 const ShowSettingsContent = () => {
-  const data = {
-    applyLink: "https://www.ecotrail.in/careers",
-    contact_details: "hr@ecotrail.in",
-    duration: "3 Months",
-    eligibility: "B.Tech in Computer Science",
-    location: "Dehradun",
-    matchScore: 85,
-    mode: "In-office",
-    notes:
-      "Recommended due to location in Dehradun and alignment with skills in Python, Django, Flask, and Javascript. Matches user's interest in web development using Python frameworks.",
-    organization: "Ecotrail Personal Care Pvt. Ltd",
-    perks: "Certificate, Letter of Recommendation",
-    program: "Software Development Intern",
-    skills: ["Python", "Django", "Flask", "Javascript"],
-    stipend: "₹5,000 - ₹10,000 / Month",
-  };
-
-  const [openIndex, setOpenIndex] = useState(null);
+  const { recommended } = useInternships(); 
 
   return (
     <div className="mt-4 flex flex-wrap gap-4">
-      {[1, 2].map((_, i) => (
-        <SettingsCard
-          key={i}
-          {...data}
-          isOpen={openIndex === i}
-          onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+      {recommended.length === 0 ? (
+        <NoDataUI />
+      ) : (
+        <SettingsCardWrapper
+          recommendationInternships={recommended}
         />
-      ))}
+      )}
     </div>
   );
+};
+
+const SettingsCardWrapper = ({ recommendationInternships }) => {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  return recommendationInternships.map((data, i) => (
+    <SettingsCard
+      key={i}
+      {...data}
+      isOpen={openIndex === i}
+      onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+    />
+  ));
 };
 
 const SettingsCard = (props) => {
