@@ -6,15 +6,12 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import AppWrapper from "./components/AppWrapper";
-import InternshipForm from "./components/IntershipForm";
-import ResumeForm from "./pages/ResumeForm";
+import AppWrapper from "./components/AppWrapper"; 
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<ResumeForm />} />
+      <Route path="/" element={<Home />} /> 
       <Route
         path="/student/dashboard"
         element={

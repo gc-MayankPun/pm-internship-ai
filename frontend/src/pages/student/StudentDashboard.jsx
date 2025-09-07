@@ -24,7 +24,7 @@ const StudentDashboard = () => {
   console.log(user);
 
   return (
-    <div className="min-h-[90vh] text-white px-8 py-10">
+    <div className="min-h-[90vh] text-white px-4 py-5 lg:px-8 lg:py-10">
       <div className="student-details">
         <h1 className="lg:text-4xl font-bold">Welcome, {user.firstName}</h1>
         <p className="text-sm text-[var(--primary-text-muted)] mt-2">

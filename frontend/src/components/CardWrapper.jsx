@@ -14,7 +14,7 @@ const CardWrapper = () => {
         buttonTitle={"Find Internships"}
         link={"/student/dashboard"}
       />
-      <Card
+      {/* <Card
         icon={<MdAdminPanelSettings className="h-[2rem] w-[2rem]" />}
         title={"For Admins"}
         subtitle={
@@ -22,7 +22,7 @@ const CardWrapper = () => {
         } 
         buttonTitle={"Open Admin Panel"}
         link={"/admin/dashboard"}
-      />
+      /> */}
     </div>
   );
 };

@@ -22,20 +22,20 @@ const Recommendations = ({ selectedOption }) => {
 
 const ShowSettingsContent = () => {
   const data = {
-    organization: "Crobstacle Ventures LLP",
-    program: "WordPress Development",
+    applyLink: "https://www.ecotrail.in/careers",
+    contact_details: "hr@ecotrail.in",
+    duration: "3 Months",
+    eligibility: "B.Tech in Computer Science",
     location: "Dehradun",
-    duration: "3 Months (Start: Immediately)",
-    stipend: "₹ 4,500 – 10,000 /month",
-    eligibility:
-      "From Dehradun only, Relevant skills/interests , Engg/CS/IT students or fresh graduates.",
-    skills:
-      "CSS, HTML, JavaScript, jQuery, MySQL, Node.js, PHP, React, SEO, WordPress",
-    perks:
-      "Certificate, Letter of Recommendation, Informal dress code, Job offer",
+    matchScore: 85,
     mode: "In-office",
-    contact_details: "",
-    notes: null,
+    notes:
+      "Recommended due to location in Dehradun and alignment with skills in Python, Django, Flask, and Javascript. Matches user's interest in web development using Python frameworks.",
+    organization: "Ecotrail Personal Care Pvt. Ltd",
+    perks: "Certificate, Letter of Recommendation",
+    program: "Software Development Intern",
+    skills: ["Python", "Django", "Flask", "Javascript"],
+    stipend: "₹5,000 - ₹10,000 / Month",
   };
 
   const [openIndex, setOpenIndex] = useState(null);
@@ -56,6 +56,11 @@ const ShowSettingsContent = () => {
 
 const SettingsCard = (props) => {
   const contentRef = useRef(null);
+  // Redirect user to the apply link
+  const handleApply = () => {
+    window.open(props.applyLink, "_blank"); // opens in new tab
+    // OR use: window.location.href = internship.applyLink; // same tab
+  };
 
   return (
     <div className="border-[.1rem] h-fit w-[25rem] p-6 rounded-lg text-[var(--primary-text-muted)] bg-[#1a1a1a] shadow-md">
@@ -67,7 +72,7 @@ const SettingsCard = (props) => {
             Top Match
           </div>
           <div className=" text-white w-fit flex items-center justify-start px-3 py-1 gap-1 text-[.8rem] rounded-xl">
-            Match Score: 11
+            Match Score: {props.matchScore}
           </div>
         </div>
         <h2 className="text-xl font-semibold text-white">{props.program}</h2>
@@ -84,7 +89,7 @@ const SettingsCard = (props) => {
       <div className="my-4">
         <p className="text-sm mb-1">Requirements:</p>
         <div className="flex flex-wrap gap-2">
-          {props.skills.split(", ").map((skill) => (
+          {props.skills.map((skill) => (
             <SettingCardSkills key={skill} skill={skill} />
           ))}
         </div>
@@ -120,72 +125,29 @@ const SettingsCard = (props) => {
             </a>
           </p>
         )}
-        {props.notes && (
-          <p>
-            <strong>Notes:</strong> {props.notes}
-          </p>
-        )}
       </div>
 
       <div className="my-4 text-sm text-white ">
-        {/* <CardAccordin contentRef={contentRef} /> */}
         <CardAccordin
           contentRef={contentRef}
           isOpen={props.isOpen}
           onToggle={props.onToggle}
+          whyRecommend={props.notes}
         />
       </div>
 
       {/* CTA */}
-      <button className="bg-[#FFE066] text-black w-full py-2 rounded-md text-sm font-semibold hover:bg-yellow-400 transition">
+      <button
+        className="bg-[#FFE066] text-black w-full py-2 rounded-md text-sm font-semibold cursor-pointer hover:bg-yellow-400 transition"
+        onClick={handleApply}
+      >
         Apply Now
       </button>
     </div>
   );
 };
 
-// const CardAccordin = ({ contentRef }) => {
-//   const [show, setShow] = useState(false);
-
-//   const toggleAccordin = () => {
-//     if (show === false) {
-//       showAnimation(contentRef.current);
-//     } else {
-//       closeAnimation(contentRef.current);
-//     }
-//     setShow(!show);
-//   };
-
-//   return (
-//     <>
-//       <div
-//         className="flex items-center justify-between hover:has-[h3]:underline cursor-pointer"
-//         onClick={toggleAccordin}
-//       >
-//         <h3 className="transition-all">Why is this Recommended?</h3>
-//         <IoIosArrowUp
-//           className={`transition-transform ${show ? "rotate-0" : "rotate-180"}`}
-//         />
-//       </div>
-
-//       <div className="border-b-[.1rem] pb-4 border-[var(--primary-text-muted)] text-sm overflow-hidden">
-//         <p ref={contentRef} id="card-accordin" className="mt-4 h-0 opacity-0">
-//           This Frontend Developer Intern position at Innovate Inc. is an
-//           excellent match for you, Alex. Your strong skills in JavaScript and
-//           React directly align with the core requirements of this role. As a
-//           3rd-year Computer Science student with a keen interest in Web
-//           Development, this internship offers the perfect opportunity to apply
-//           your knowledge and gain practical experience with modern web
-//           technologies. Furthermore, the internship's location in San Francisco
-//           matches your preferred location, making it a highly suitable
-//           opportunity for your career development.
-//         </p>
-//       </div>
-//     </>
-//   );
-// };
-
-const CardAccordin = ({ isOpen, onToggle }) => {
+const CardAccordin = ({ isOpen, onToggle, whyRecommend }) => {
   return (
     <div className="w-full">
       <div
@@ -205,7 +167,7 @@ const CardAccordin = ({ isOpen, onToggle }) => {
           isOpen ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0"
         }`}
       >
-        <p className="text-sm">
+        {/* <p className="text-sm">
           This Frontend Developer Intern position at Innovate Inc. is an
           excellent match for you, Alex. Your strong skills in JavaScript and
           React directly align with the core requirements of this role. As a
@@ -215,7 +177,8 @@ const CardAccordin = ({ isOpen, onToggle }) => {
           technologies. Furthermore, the internship's location in San Francisco
           matches your preferred location, making it a highly suitable
           opportunity for your career development.
-        </p>
+        </p> */}
+        <p className="text-sm">{whyRecommend}</p>
       </div>
     </div>
   );

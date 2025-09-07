@@ -1,14 +1,16 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import 'dotenv/config';
 import prompt from "../prompt/prompt.js";
+import "dotenv/config"; 
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-async function AI_recommendation(education, skill, location) {
+async function AI_recommendation(degree, skill, location, interests) {
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
   // Gemini API call
-  const geminiCall = model.generateContent(prompt(education, skill, location));
+  const geminiCall = model.generateContent(
+    prompt(degree, skill, location, interests)
+  );
 
   // Timeout  (10 seconds)
   const timeout = new Promise((_, reject) =>
@@ -18,7 +20,7 @@ async function AI_recommendation(education, skill, location) {
   try {
     const result = await Promise.race([geminiCall, timeout]);
     const recommendation = result.response.text();
-    return recommendation
+    return recommendation;
   } catch (error) {
     return error.message;
   }

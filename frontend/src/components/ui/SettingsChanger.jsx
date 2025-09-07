@@ -1,6 +1,5 @@
 import { IoBriefcase } from "react-icons/io5";
 import { GrOrganization } from "react-icons/gr";
-import { GoOrganization } from "react-icons/go";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoDocumentTextOutline } from "react-icons/io5";
 
@@ -14,13 +13,13 @@ const iconMap = {
 const SettingsChanger = ({
   settingsData,
   selectedOption,
-  setSelectedOption, 
+  setSelectedOption,
 }) => {
   return (
-    <div className="border-[.1rem] w-fit p-1 flex gap-2 rounded-md">
+    <div className="border-[.1rem] w-full overflow-hidden overflow-x-auto lg:w-fit p-2 lg:p-1 flex items-center gap-2 rounded-md">
       {settingsData.map((option) => (
         <SettingValue
-          key={option.id} 
+          key={option.id}
           optionName={option.optionName}
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
@@ -30,22 +29,18 @@ const SettingsChanger = ({
   );
 };
 
-const SettingValue = ({ 
-  optionName,
-  selectedOption,
-  setSelectedOption,
-}) => {
+const SettingValue = ({ optionName, selectedOption, setSelectedOption }) => {
   const isSelected = selectedOption === optionName;
-  const icon = iconMap[optionName]
+  const icon = iconMap[optionName];
 
   return (
     <div
-      className={`rounded-md cursor-pointer min-w-[6rem] transition ${
-        isSelected ? "bg-blue-600 text-white" : "bg-transparent"
+      className={`h-fit w-fit border-[.1rem] rounded-md cursor-pointer lg:min-w-[6rem] transition ${
+        isSelected ? "bg-blue-900 text-white" : "bg-transparent"
       }`}
       onClick={() => setSelectedOption(optionName)}
     >
-      <p className="text-sm px-4 py-1 rounded-md text-center flex items-center justify-center gap-2">
+      <p className="h-full w-[10rem] text-sm px-4 py-1 rounded-md text-center flex items-center justify-center gap-2">
         {icon}
         {optionName}
       </p>

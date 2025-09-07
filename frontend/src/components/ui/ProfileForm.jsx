@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useUser } from "@clerk/clerk-react";
+import { updateUserProfile } from "../../api/postUserData";
 
 const ProfileForm = () => {
   const { user } = useUser();
@@ -30,10 +31,45 @@ const ProfileForm = () => {
     }
   }, [user, reset]);
 
-  const onSubmit = (data) => {
-    console.log("Form submitted:", data);
-    // Save back to Clerk metadata
-    user.update({ unsafeMetadata: data });
+  const onSubmit = async (data) => {
+    try {
+      // 1️⃣ Update Clerk metadata
+      await user.update({ unsafeMetadata: data });
+
+      // 2️⃣ Send data to your API and get the response
+      const response = await updateUserProfile(data);
+
+      if (!response) return;
+
+      let recommendations = response;
+
+      // If response is a string (with ```json or just JSON), clean & parse it
+      if (typeof response === "string") {
+        // Remove any backticks or code fences
+        const cleaned = response.replace(/```(json)?/g, "").trim();
+        try {
+          recommendations = JSON.parse(cleaned);
+        } catch (err) {
+          console.error("Failed to parse AI response:", err);
+          return;
+        }
+      }
+
+      const recommended =
+        recommendations.find((r) => r.type === "recommended")?.internships ||
+        [];
+      const allRelated =
+        recommendations.find((r) => r.type === "allRelated")?.internships || [];
+
+      console.log("Recommended internships:", recommended);
+      console.log("All related internships:", allRelated);
+
+      // 5️⃣ You can now set state to render them
+      // setRecommendedInternships(recommended);
+      // setAllRelatedInternships(allRelated);
+    } catch (err) {
+      console.error("Error submitting profile:", err);
+    }
   };
 
   return (
@@ -42,7 +78,7 @@ const ProfileForm = () => {
       className="mx-auto rounded-xl shadow-lg text-white"
     >
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center gap-4">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
           <ProfileInput
             register={register}
             label="Full Name"
@@ -50,7 +86,10 @@ const ProfileForm = () => {
             placeholder="Alex Doe"
             rules={{
               required: "Name is required",
-              minLength: { value: 2, message: "Name must be at least 2 characters." },
+              minLength: {
+                value: 2,
+                message: "Name must be at least 2 characters.",
+              },
             }}
             errors={errors}
           />
@@ -67,7 +106,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div className="flex justify-between items-center gap-4">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
           <ProfileInput
             register={register}
             label="Degree"
@@ -78,10 +117,10 @@ const ProfileForm = () => {
           />
           <ProfileInput
             register={register}
-            label="Year of Study"
+            label="Experience"
             inputName="year"
             placeholder="3rd Year"
-            rules={{ required: "Year is required" }}
+            rules={{ required: "Experience is required" }}
             errors={errors}
           />
         </div>
@@ -95,7 +134,7 @@ const ProfileForm = () => {
             rules={{ required: "Location is required" }}
             errors={errors}
           />
-          <ProfileInput
+          {/* <ProfileInput
             register={register}
             label="Resume URL"
             inputName="resumeUrl"
@@ -108,7 +147,7 @@ const ProfileForm = () => {
             //   },
             // }}
             errors={errors}
-          />
+          /> */}
         </div>
 
         <ProfileTextarea
@@ -128,11 +167,11 @@ const ProfileForm = () => {
           errors={errors}
         />
       </div>
-
+      
       <div className="mt-6 flex justify-end">
         <button
           type="submit"
-          className="px-6 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg transition"
+          className="w-full lg:w-fit px-6 py-2 bg-[#FFE066] hover:bg-yellow-400 cursor-pointer text-black font-semibold rounded-lg transition"
         >
           Update Profile
         </button>
@@ -141,7 +180,14 @@ const ProfileForm = () => {
   );
 };
 
-const ProfileInput = ({ label, register, inputName, rules, errors, placeholder }) => (
+const ProfileInput = ({
+  label,
+  register,
+  inputName,
+  rules,
+  errors,
+  placeholder,
+}) => (
   <div className="w-full">
     <label htmlFor={inputName} className="block text-sm text-gray-300 mb-1">
       {label}
@@ -150,7 +196,7 @@ const ProfileInput = ({ label, register, inputName, rules, errors, placeholder }
       id={inputName}
       placeholder={placeholder}
       {...register(inputName, rules)}
-      className={`w-full p-2 rounded-md bg-[#111] text-white outline-none focus:ring-2 focus:ring-yellow-400 ${
+      className={`resize-none w-full p-2 rounded-md bg-[#111] text-white outline-none focus:ring-2 focus:ring-yellow-400 ${
         errors[inputName] ? "border border-red-500" : ""
       }`}
     />
@@ -160,7 +206,14 @@ const ProfileInput = ({ label, register, inputName, rules, errors, placeholder }
   </div>
 );
 
-const ProfileTextarea = ({ label, register, inputName, rules, errors, placeholder }) => (
+const ProfileTextarea = ({
+  label,
+  register,
+  inputName,
+  rules,
+  errors,
+  placeholder,
+}) => (
   <div className="md:col-span-2">
     <label htmlFor={inputName} className="block text-sm text-gray-300 mb-1">
       {label}
