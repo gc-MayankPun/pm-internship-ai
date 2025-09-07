@@ -10,7 +10,7 @@ async function AI_recommendation(education, skill, location) {
   // Gemini API call
   const geminiCall = model.generateContent(prompt(education, skill, location));
 
-  // Timeout  (10 seconds)
+  // Timeout
   const timeout = new Promise((_, reject) =>
     setTimeout(() => reject(new Error("Recommendation timeout")), 150000)
   );

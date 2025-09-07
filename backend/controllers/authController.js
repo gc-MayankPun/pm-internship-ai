@@ -22,6 +22,7 @@ export async function signup(req, res) {
       education,
       skills,
       location});
+      
     res.json({ message: "Signup successful", user: newUser , recommendations});
   } catch (err) {
     res.status(500).json({ error: err.message });

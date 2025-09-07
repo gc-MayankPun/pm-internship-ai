@@ -1131,7 +1131,7 @@ User Profile:
 
 Output Requirements:
 - Return only a JSON array of objects (no key like "recommendations", no code blocks, no explanations).
-- Each object must have: organization, program, location, duration, stipend, eligibility, skills, perks, mode, contact_details, notes.
+- Each object must have: organization, program, location, duration, stipend, eligibility, skills, perks, mode, contact_details, notes, apply link.
 - If contact_details or stipend are unavailable, leave them as an empty string.
 - Ensure all links are valid.
 
