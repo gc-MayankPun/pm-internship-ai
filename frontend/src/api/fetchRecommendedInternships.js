@@ -20,7 +20,7 @@ export const fetchRecommenedInternships = async (email) => {
       }
     );
 
-    console.log("Server response inside toast.promise:", response);
+    // console.log("Server response inside toast.promise:", response);
     return response; // already the data
   } catch (err) {
     console.error(err);

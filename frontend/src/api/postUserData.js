@@ -20,7 +20,7 @@ export const updateUserProfile = async (formData) => {
       }
     );
 
-    console.log("Server response inside toast.promise:", response);
+    // console.log("Server response inside toast.promise:", response);
     return response; // already the data
   } catch (err) {
     console.error(err);

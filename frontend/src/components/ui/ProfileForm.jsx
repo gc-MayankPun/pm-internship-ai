@@ -49,9 +49,9 @@ const ProfileForm = () => {
       setRecommended(recommended);
       setAllRelated(allRelated);
 
-      console.log("✅ Profile updated & context set");
+      // console.log("✅ Profile updated & context set");
     } catch (err) {
-      console.error("Error submitting profile:", err);
+      // console.error("Error submitting profile:", err);
     }
   };
 

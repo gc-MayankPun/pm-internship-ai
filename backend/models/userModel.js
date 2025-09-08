@@ -43,8 +43,6 @@ export async function createUser(
       JSON.stringify(recommendations) // 👈 same
     ]
   );
-
-  return result.rows[0];
 }
 
 export async function findUserByClerkId(clerkId) {
