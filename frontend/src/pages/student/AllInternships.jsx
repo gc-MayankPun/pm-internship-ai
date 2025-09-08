@@ -2,6 +2,7 @@ import { IoBriefcase } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaRupeeSign } from "react-icons/fa";
 
+
 const AllInternships = ({ selectedOption }) => {
   return <ShowSettingsContent selectedOption={selectedOption} />;
 };

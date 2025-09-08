@@ -119,7 +119,7 @@ const ProfileForm = () => {
             register={register}
             label="Experience"
             inputName="year"
-            placeholder="3rd Year"
+            placeholder="total years working"
             rules={{ required: "Experience is required" }}
             errors={errors}
           />
