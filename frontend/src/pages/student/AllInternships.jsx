@@ -1,6 +1,8 @@
 import { IoBriefcase } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaRupeeSign } from "react-icons/fa";
+import NoDataUI from "../../components/ui/NoDataUI";
+import { useInternships } from "../../context/useInternships";
 
 
 const AllInternships = ({ selectedOption }) => {
@@ -8,21 +10,9 @@ const AllInternships = ({ selectedOption }) => {
 };
 
 const ShowSettingsContent = ({ selectedOption }) => {
-  const data = {
-    applyLink: "https://letsgrowmore.in/internship/",
-    contact_details: "",
-    duration: "1 Month",
-    eligibility: "Students from any background",
-    location: "Remote",
-    mode: "Remote",
-    organization: "The Sparks Foundation",
-    perks: "Certificate, Letter of Recommendation",
-    program: "Web Development Internship",
-    skills: ["HTML", "CSS", "JavaScript"],
-    stipend: "unpaid",
-  };
+  const { allRelated } = useInternships();
 
-  return ( 
+  return (
     <div className="mt-4 p-4 bg-[#1C2222] rounded-md border-[.1rem] border-[var(--primary-text-muted)]">
       <div className="">
         <h2 className="text-2xl font-semibold">{selectedOption.heading}</h2>
@@ -31,24 +21,31 @@ const ShowSettingsContent = ({ selectedOption }) => {
         </p>
       </div>
       <div className="mt-4 flex flex-wrap gap-4">
-        <SettingsCard {...data} />
-        <SettingsCard {...data} />
-        <SettingsCard {...data} />
-        <SettingsCard {...data} />
+        {allRelated.length === 0 ? (
+          <NoDataUI />
+        ) : (
+          <SettingsCardWrapper allRelatedInternships={allRelated} />
+        )}
       </div>
     </div>
   );
 };
 
+const SettingsCardWrapper = ({ allRelatedInternships }) => {
+  return allRelatedInternships.map((data, i) => (
+    <SettingsCard key={i} {...data} />
+  ));
+};
+
 const SettingsCard = (props) => {
   // Redirect user to the apply link
   const handleApply = () => {
-    window.open(props.applyLink, "_blank"); // opens in new tab 
+    window.open(props.applyLink, "_blank"); // opens in new tab
     // OR use: window.location.href = internship.applyLink; // same tab
   };
 
   return (
-    <div className="border-[.1rem] min-h-[20rem] w-[22rem] p-6 rounded-lg text-[var(--primary-text-muted)] bg-[#1a1a1a] shadow-md">
+    <div className="border-[.1rem] h-fit w-[22rem] p-6 rounded-lg text-[var(--primary-text-muted)] bg-[#1a1a1a] shadow-md">
       {/* Header */}
       <div className="mb-2">
         <h2 className="text-xl font-semibold text-white">{props.program}</h2>
@@ -104,7 +101,10 @@ const SettingsCard = (props) => {
       </div>
 
       {/* CTA */}
-      <button className="bg-[#FFE066] text-black w-full py-2 rounded-md text-sm font-semibold cursor-pointer hover:bg-yellow-400 transition" onClick={handleApply}>
+      <button
+        className="bg-[#FFE066] text-black w-full py-2 rounded-md text-sm font-semibold cursor-pointer hover:bg-yellow-400 transition"
+        onClick={handleApply}
+      >
         Apply Now
       </button>
     </div>

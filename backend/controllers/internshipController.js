@@ -5,9 +5,9 @@ import { findUserById } from "../models/userModel.js";
 export async function listInternships(req, res) {
   try {
     const internships = await getAllInternships();
-    res.json(internships);
+    return res.json(internships);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 }
 
@@ -17,8 +17,8 @@ export async function recommendedInternships(req, res) {
 
     const recommendations = await getRecommendedInternships(email);
 
-    res.json(recommendations);
+    return res.json(recommendations);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 }

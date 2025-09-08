@@ -4,7 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import { Bounce, ToastContainer } from "react-toastify";
-import { ClerkProvider } from "@clerk/clerk-react";
+import { ClerkProvider } from "@clerk/clerk-react";  
+import { InternshipProvider } from "./context/InternshipProvider.jsx";
 
 // Import your Publishable Key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -62,7 +63,9 @@ createRoot(document.getElementById("root")).render(
           },
         }}
       >
-        <App />
+        <InternshipProvider>
+          <App />
+        </InternshipProvider>
       </ClerkProvider>
     </BrowserRouter>
   </StrictMode>

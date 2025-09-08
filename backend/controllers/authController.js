@@ -16,18 +16,19 @@ export async function signup(req, res) {
       interests
     );
 
-    const newUser = await createUser(
-      fullName,
-      email,
-      degree,
-      year,
-      location,
-      skills,
-      interests,
-      recommendations
-    );
+    // const newUser = await createUser(
+    //   fullName,
+    //   email,
+    //   degree,
+    //   year,
+    //   location,
+    //   skills,
+    //   interests,
+    //   recommendations
+    // );
 
-    return res.json(newUser); // 👈 better: return the full user object
+    // return res.json(newUser); // 👈 better: return the full user object
+    return res.json(recommendations);
   } catch (err) {
     console.error("Signup error:", err); // 👈 will show Postgres error in your terminal
     return res.status(500).json({ error: err.message });

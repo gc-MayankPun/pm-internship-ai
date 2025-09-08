@@ -2,9 +2,12 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useUser } from "@clerk/clerk-react";
 import { updateUserProfile } from "../../api/postUserData";
+import { parseDataFromBackend } from "../../utils/parseDataFromBackend"; 
+import { useInternships } from "../../context/useInternships";
 
 const ProfileForm = () => {
   const { user } = useUser();
+  const { setRecommended, setAllRelated } = useInternships();
 
   const {
     register,
@@ -37,36 +40,16 @@ const ProfileForm = () => {
       await user.update({ unsafeMetadata: data });
 
       // 2️⃣ Send data to your API and get the response
-      const response = await updateUserProfile(data);
+      // const response = await updateUserProfile(data);
+      const { recommended, allRelated } = await parseDataFromBackend(() =>
+        updateUserProfile(data)
+      );
 
-      if (!response) return;
+      // 3️⃣ Store in context (updates UI everywhere, no refetch needed)
+      setRecommended(recommended);
+      setAllRelated(allRelated);
 
-      let recommendations = response;
-
-      // If response is a string (with ```json or just JSON), clean & parse it
-      if (typeof response === "string") {
-        // Remove any backticks or code fences
-        const cleaned = response.replace(/```(json)?/g, "").trim();
-        try {
-          recommendations = JSON.parse(cleaned);
-        } catch (err) {
-          console.error("Failed to parse AI response:", err);
-          return;
-        }
-      }
-
-      const recommended =
-        recommendations.find((r) => r.type === "recommended")?.internships ||
-        [];
-      const allRelated =
-        recommendations.find((r) => r.type === "allRelated")?.internships || [];
-
-      console.log("Recommended internships:", recommended);
-      console.log("All related internships:", allRelated);
-
-      // 5️⃣ You can now set state to render them
-      // setRecommendedInternships(recommended);
-      // setAllRelatedInternships(allRelated);
+      console.log("✅ Profile updated & context set");
     } catch (err) {
       console.error("Error submitting profile:", err);
     }
@@ -167,7 +150,7 @@ const ProfileForm = () => {
           errors={errors}
         />
       </div>
-      
+
       <div className="mt-6 flex justify-end">
         <button
           type="submit"

@@ -1,27 +1,11 @@
-import SettingsChanger from "../../components/ui/SettingsChanger";
-import { studentSettingsOptions } from "../../api/studentSettingOptions";
+import { studentSettingsOptions } from "../../utils/studentSettingOptions";
+import SettingsChanger from "../../components/ui/SettingsChanger"; 
 import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
 import ActiveOption from "../../utils/activeOption";
 
-// Expected output
-// {
-//     "organization": "Crobstacle Ventures LLP",
-//     "program": "WordPress Development",
-//     "location": "Dehradun",
-//     "duration": "3 Months (Start: Immediately)",
-//     "stipend": "₹ 4,500 – 10,000 /month (Fixed + Incentives) Job offer: ₹ 2 LPA post internship",
-//     "eligibility": "From Dehradun only, Relevant skills/interests , Engg/CS/IT students or fresh graduates.",
-//     "skills": "CSS, HTML, JavaScript, jQuery, MySQL, Node.js, PHP, React, SEO, WordPress",
-//     "perks": "Certificate, Letter of Recommendation, Informal dress code, Job offer",
-//     "mode": "In-office",
-//     "contact_details": "",
-//     "notes": null
-//   }
-
 const StudentDashboard = () => {
   const { user } = useUser();
-  console.log(user);
 
   return (
     <div className="min-h-[90vh] text-white px-4 py-5 lg:px-8 lg:py-10">
